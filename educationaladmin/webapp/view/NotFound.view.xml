@@ -1,0 +1,9 @@
+<mvc:View
+	controllerName="com.lt.educationaladmin.controller.NotFound"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<IllustratedMessage
+		illustrationType="sapIllus-PageNotFound"
+		title="{i18n>NotFound}"
+		description="{i18n>NotFound.text}\n{i18n>NotFound.description}" />
+</mvc:View>

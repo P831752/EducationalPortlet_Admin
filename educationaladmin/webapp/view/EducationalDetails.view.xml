@@ -1,0 +1,6 @@
+<mvc:View controllerName="com.lt.educationaladmin.controller.EducationalDetails"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+	<Page title="Educational Details">
+	</Page>
+</mvc:View>

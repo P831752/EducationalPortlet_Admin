@@ -1,0 +1,75 @@
+<mvc:View controllerName="com.lt.educationaladmin.controller.EducationalAdmin"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+     <IconTabBar
+        id="idIconTabBar"
+		select=".onFilterSelect"
+		class="sapUiResponsiveContentPadding">
+        <items>
+			<IconTabFilter
+				text="Info"
+				key="info"
+				count="3">
+				<Text text="Info content goes here ..." />
+			
+<!--			<IconTabFilter
+				text="Pending for Approval"
+				key="pending"
+				count="{pendingListCount>/count}">
+				<Text text="Pending list here ..." />
+			</IconTabFilter>
+			<IconTabFilter
+				text="Approved"
+				key="approved"
+				count="10">
+				<Text text="Notes go here ..." />
+			</IconTabFilter>
+			<IconTabFilter
+				text="Rejected"
+				key="rejected"
+				count="1">
+				<Text text="People content goes here ..." />
+			</IconTabFilter>-->
+        <content>
+			<Table
+                id="psidTable"
+                inset="false"
+				showSeparators="Inner"
+				headerText="Products"
+				items="{
+					path: 'pendingListModel>/',
+						sorter: {
+							path: 'psid'
+						}
+					}"
+					class="sapFDynamicPageAlignContent"
+					width="auto">
+                	<columns>
+						<Column width="12em">
+							<Text text="PSID"/>
+						</Column>
+						<!-- <Column hAlign="End"> -->
+						<Column	width="12em">
+							<Text text="Status"/>
+						</Column>
+						<Column	width="12em">
+							<Text text="Submission Date"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem type="Navigation" press=".onListItemPress">
+							<cells>
+								<Text text="{pendingListModel>psid}" />
+								<Text text="{pendingListModel>status}" />
+								<Text text="{pendingListModel>modifiedat}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+            </Table>
+        </content>
+
+        </IconTabFilter>
+    </items>
+</IconTabBar>
+
+</mvc:View>

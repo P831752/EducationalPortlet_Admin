@@ -1,0 +1,137 @@
+{
+  "_version": "1.76.0",
+  "sap.app": {
+    "id": "com.lt.educationaladmin",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.18.5",
+      "toolsId": "dba8c67c-e69e-4e7f-8ac5-c2521573c02a"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/educational/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.139.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.lt.educationaladmin.i18n.i18n"
+        }
+      },
+      "educational": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "com.lt.educationaladmin.view",
+        "viewPath": "com.lt.educationaladmin.view",
+        "bypassed": {
+					"target": "notFound"
+				},
+        "async": true
+      },
+      "routes": [
+        {
+          "name": "RouteEducationalAdmin",
+          "pattern": ":?query:",
+          "target": [
+            "TargetEducationalAdmin"
+          ]
+        },
+        {
+          "name": "EducationalDetails",
+          "pattern": "educationalDetail/{psid}",
+          "target": [
+            "TargetEducationalDetails"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetEducationalAdmin": {
+          "id": "EducationalAdmin",
+          "name": "EducationalAdmin"
+        },
+        "TargetEducationalDetails": {
+          "id": "EducationalDetails",
+          "name": "EducationalDetails"
+        },
+				"notFound": {
+					"id": "notFound",
+					"name": "NotFound",
+					"transition": "show"
+				}
+      }
+    },
+    "rootView": {
+      "viewName": "com.lt.educationaladmin.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

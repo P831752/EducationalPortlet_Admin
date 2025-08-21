@@ -1,0 +1,85 @@
+_schema-version: "3.2"
+ID: EducationalPortlet_Admin
+description: Educational Portlet Administration
+version: 0.0.1
+modules:
+- name: EducationalPortlet_Admin-router
+  type: approuter.nodejs
+  path: router
+  requires:
+  - name: EducationalPortlet_Admin-html5-repo-runtime
+  - name: EducationalPortlet_Admin-uaa
+  - name: EducationalPortlet_Admin-destination-service
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 256M
+    memory: 256M
+- name: EducationalPortlet_Admin-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: EducationalPortlet_Admin-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - comlteducationaladmin.zip
+      name: comlteducationaladmin
+      target-path: resources/
+- name: comlteducationaladmin
+  type: html5
+  path: educationaladmin
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: EducationalPortlet_Admin-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: EducationalPortlet_Admin-${space-guid}
+    service: xsuaa
+    service-plan: application
+- name: EducationalPortlet_Admin-html5-repo-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: EducationalPortlet_Admin-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: EducationalPortlet_Admin-destination-service
+    service-plan: lite
+- name: EducationalPortlet_Admin-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: EducationalPortlet_Admin-html5-service
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

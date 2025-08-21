@@ -1,0 +1,43 @@
+<mvc:View controllerName="com.lt.educationaladmin.controller.EducationalAdmin"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+ 
+<IconTabBar id="idIconTabBar1" select="onFilterSelect">
+    <items>
+        <IconTabFilter text="Pending" key="PA" count="{pendingList>/count}"/>
+        <IconTabFilter text="Approved" key="A" count="{approvedList>/count}"/>
+        <IconTabFilter text="Rejected" key="R" count="{rejectedList>/count}"/>
+        <IconTabFilter text="Draft" key="D" count="{draftList>/count}"/>
+    </items>
+    <content>
+        <Table
+            id="statusTable"
+            items="{activeModel>/}"
+            inset="false"
+            headerText="Status Table">
+            <columns>
+                <Column>
+                    <Text text="PSID" />
+                </Column>
+                <Column>
+                    <Text text="Status" />
+                </Column>
+                <Column>
+                    <Text text="Submission Date" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem type="Navigation" press=".onListItemPress">
+                    <cells>
+                        <Text text="{activeModel>psid}" />
+                        <Text text="{activeModel>status}" />
+                        <Text text="{activeModel>modifiedAt}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </content>
+</IconTabBar>
+
+
+</mvc:View>
