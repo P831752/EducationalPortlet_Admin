@@ -1,0 +1,525 @@
+<template> 
+    <style>
+    .opjectPaeSubsection{
+        margin-top:3px;
+        margin-bottom:3px;
+        border-top: 1px solid;
+        border: 1px solid;
+        text-align:center;
+        width: 97%;
+    }
+    .sectionLabel{
+        margin:0px;
+        display: flex;
+        border-top:1px solid;
+        border-left:1px solid;
+        padding-left:2px;
+        text-align: left;
+        width:15%;
+    }
+    .sectionText{
+        margin:0px;
+        display: flex;
+        border-top: 1px solid;
+        border-right:1px solid;
+        padding-left:2px;
+        text-align: left;
+        width: 85%;
+    }
+    .printAreaBox {
+        border: 3px solid;
+        max-width: 210mm;
+        margin: auto;
+        background-color: white;
+    }
+    .headerLogo{
+         margin-top:5px !important;
+    }
+    .companyIndLeft {
+        margin-top:10px;
+        margin-left:0px;
+        padding-left:2px;
+        display: flex;
+        border: 1px solid;
+        text-align: left;
+        width: 57%;
+    }
+    .companyIndRight {
+        margin-top:10px;
+        margin-left:0px;
+        padding-left:2px;
+        display: flex;
+        border-right: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        text-align: left;
+        width: 57%;
+    }
+
+    .imageClass{
+        width: 120px;      
+        height: 120px;       
+        border-radius: 50%;   
+        object-fit: cover;  
+    }
+
+    .fieldClass{
+        margin:0px;
+        display: flex;
+        border-top:1px solid;
+        border-right:1px solid;
+        padding-left:2px;
+        text-align: left;
+        width:35%;
+    }
+    
+    .fieldText{
+        margin:0px;
+        display: flex;
+        border-top: 1px solid;
+        padding-left:2px;
+        text-align: left;
+        width: 65%;
+    }
+    
+    .addresssBox {
+        margin-top:3px;
+        margin-right:2px;
+        display: flex;
+        border: 1px solid;
+        text-align: left;
+        width:40%;
+        padding-left:2px;
+    }
+    
+    .quotationDetails{
+        margin-top:3px;
+        margin-right:auto;
+        display: flex;
+        border: 1px solid;
+        text-align: center;
+        width: 50%;
+    }
+    
+    .quotationDetails1{
+        margin:0px;
+        display: flex;
+        border-right: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 0px solid;
+        padding-left:2px;
+        text-align: left;
+        width: 100%;
+    }
+    
+    .quotationDetailsLast{
+        margin:0px;
+        display: flex;
+        border-top: 1px solid;
+        border-bottom: 0px solid;
+        padding-left:2px;
+        text-align: left;
+        width: 100%;
+    }
+    
+    .headerTitle{
+        font-size:18px;
+        font-weight:bold;
+    }
+    .titleClass{
+        padding: 5px;
+        font-size:15px;
+        font-weight:bold;
+    }
+    
+    .blockClass{
+        margin-top:3px;
+        margin-bottom:3px;
+        border: 1px solid;
+        text-align:left;
+        width: 100%;
+    }
+    
+    .vBoxquotationTerms{
+        border: 1px solid;
+        text-align:left;
+        width: 100%;
+    }
+    
+    .squareBorder {
+        flex: 1;
+        border: 1px solid;
+        text-align: center;
+    }
+    .hrline{
+     max-width: 210mm !important;	
+    }
+    
+    .sapMLIBShowSeparator>td {
+      /*  border-top: 2px solid #ccc;*/
+        border-right: 1px solid;
+    }
+    .sapMLIBShowSeparator>td:first-child {
+        border-left: 1px solid;
+    }
+    .table th {
+        border-right: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+    }
+    
+    .itemTable th {
+        border-right: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+    }
+    
+    
+    .cusnoRightBorder{
+        border-right: 0px !important;
+    }
+    
+    .cusnoBorder{
+        border: 0px !important;
+    }
+    .itemTotalTable  {
+         border-right: 1px solid;
+        border-top: 0px solid; 
+        border-bottom: 1px solid; 
+         border-left: 1px solid; 
+    }
+    .table th:first-child {
+         border-top: 0px solid;
+         border-right: 0px solid;
+         border-left: 0px solid;
+    }
+    .table th:last-child {
+        border-right: 1px solid;
+    }
+    .tableborder {
+       flex: 1;
+       border: 1px solid;
+       text-align: center !important;
+       width: 100%;
+    }
+    
+    .custProductsTable3 th{
+    border-right: 1px solid;
+        border-top: 0px solid;
+        border-bottom: 0px solid;
+        border-left: 0px solid;
+       
+    }
+    
+    .custProductsTable3 tr{
+     height: 1rem !important;
+    }
+    .custProductsTable3 th{
+     height: 1rem !important;
+    }
+    
+    .taxBaseTableborder {
+       flex: 1;
+       border: 1px solid;
+       text-align: center !important;
+       width: 21.5rem;
+        margin-top:3px;
+    }
+    
+    .taxBaseborder {
+       border-top: 0px solid !important;
+       border-bottpm: 0px solid !important;
+       border-left: 0px solid !important;
+       border-right: 0px solid !important;
+    }
+    .sapMListTblRow.sapMLIBFocusable.sapMListTblFooter{
+        height: 25px;
+    }
+    .sapMListTblRow {
+         height:1.5rem; 
+    }
+    .sapMListTbl .sapMText, .sapMListTbl .sapMLabel {
+        font-size: small;
+        color: #32363a;
+    /*    font-weight: unset;*/
+    }
+    
+    .billTo{
+         font-size:17px;
+         font-weight:bold;	
+    }
+    .shipTo{
+         font-size:17px;
+         font-weight:bold;
+    }
+    .cusNetAmtTable{
+        width: 288px !important;
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
+    }
+    .subTable{
+        margin-left:0%;
+    
+        border-right: 0px solid;
+    }
+    .totalTable{
+          margin:0px;
+        display: flex;
+        border-top: 0px solid;
+        border-right: 0px solid;
+        border-left: 1px solid;
+        border-bottom: 1px solid;
+        text-align: center;
+        width:51px;
+    }
+    
+    .totalTableAmt{
+        margin:0px;
+        display: flex;
+        border-top: 0px solid;
+        border-right: 0px solid;
+        border-left: 1px solid;
+        border-bottom: 1px solid;
+        text-align: right;
+        padding-right: 8px;
+        width:64px;
+       
+    }
+    
+    .totalTableTaxPer{
+        margin:0px;
+        display: flex;
+        border-top: 0px solid;
+        border-right: 0px solid;
+        border-left: 1px solid;
+        border-bottom: 1px solid;
+        text-align: center;
+        width:37px;
+        
+    }
+    
+    .totalTableTaxAmt{
+        margin:0px;
+        display: flex;
+        border-top: 0px solid;
+        border-right: 0px solid;
+        border-left: 1px solid;
+        border-bottom: 1px solid;
+        text-align: right;
+        padding-right: 7px;
+        width:59px;
+        
+    }
+    
+    .totalTableFTotal{
+        margin:0px;
+        display: flex;
+        border-top: 0px solid;
+        border-right: 1px solid;
+        border-left: 1px solid;
+        border-bottom: 1px solid;
+        text-align: right;
+        padding-right: 17px;
+        width:77px;
+       
+    }
+    
+    .FREIGHTtotalTable{
+        margin:0px;
+    /*margin-right:0px;*/
+      /*  margin-bottom: 20px;*/
+        display: flex;
+          border-right: 1px solid #ccc;
+        border: 1px solid #ccc;
+       /*  border-bottom: 0px;*/
+        text-align: center;
+        width:53px;	
+    }
+    .netamounttable{
+            margin-right:15%	
+    }
+    .sapMListTbl {
+        font-size:17px!important;
+    }
+    .sapMListTblCell {
+        vertical-align: middle;
+    }
+    .amount {
+        margin-top: 3px;
+        margin-bottom: 3px;
+        border: 1px solid;
+        text-align: left;
+        height: 30px;
+        width: 100%;
+    }
+    
+    
+    .sIgnaturebox4 {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        border: 2px solid;
+        text-align: center;
+        width: 57%;
+    }
+    
+    
+    .sIgnaturebox6 {
+         margin-right:3px;
+        margin-bottom:3px;
+        border: 2px solid;
+        text-align: left;
+        height: 30px;
+        width: 35%;
+    }
+    
+    .custPreparedBy{
+        margin-bottom:3px;
+        border-left: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        text-align: center;
+        height: 50px;
+        width: 33%;
+    }
+    
+    .custReceivedBy{
+        margin-bottom:3px;
+        border: 1px solid;
+        text-align: center;
+        height: 50px;
+        width: 33%;
+    }
+    
+    .custAuthSign{
+        margin-bottom:3px;
+        border-right: 1px solid;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        text-align: center;
+        height: 50px;
+        width: 34%;
+    }
+    
+    .sIgnaturebox8 {
+        margin-bottom:10px;
+        border: 1px solid;
+        text-align: left;
+        height: auto;
+        width: 100%;
+    }
+    
+    .sIgnaturebox2 {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 2px solid;
+        text-align: left;
+        width: 57%;
+      
+    }
+    .myText{
+         font-size:17px;
+         font-weight:bold;
+    }
+    .sIgnaturebox9 {
+        margin-bottom: 20px;
+        text-align: center;
+        width: 100%;
+    }
+    .smallLabel {
+        font-size: 9px;
+         text-align:center;
+    }
+    .textbold{
+         font-weight:bold !important;
+         font-size: 8px !important;
+    }
+    
+    .textboldfs{
+         font-weight:bold !important;
+         font-size: 10px !important;
+    }
+    
+    .cusFontSize{
+        font-size: 8px !important;
+    }
+    
+    .sapMTB {
+        height: 4rem;
+        margin-top: .5rem;
+    }
+    
+    
+    .sapMTBStandard {
+        border-bottom: none;
+    }
+    
+    
+    .sapMColumnHeader {
+        padding: 0px;
+    }
+    
+     .sapMText{
+         font-size: 0.730rem;
+    }
+    
+    
+    /* Styles go here */
+    
+    /* PRINT STYLES */
+    @media print { 
+        /* usage of !important hard overwrites, because UI5 uses inline style directives (style="width:990px")  */
+        
+        /* define print page default settings */
+        @page {
+            size: portrait;
+            margin: 1.5cm 1cm;
+        }
+        
+        /* scale content to fit print page */
+        html, body {
+            width: 100% !important;
+            height: auto !important;
+        }
+        
+        /* reset body */
+        body {
+            margin: 0;
+            padding: 0;
+            float: none; 
+            color: #000;
+        }
+        
+        /* helper class to allow selective hiding elements from printing (ex print button)  */
+        .uoNoPrint {
+            display: none;
+        }    
+        
+        /* fix overflow scrolling */
+        * {
+            overflow-x: visible !important; 
+            overflow-y: visible !important;
+        }
+        
+        /* auto expand collapsed panel contents */
+        .sapMPanelExpandablePart {
+            display: block !important;
+        }
+        
+        /* disable panel content border */
+        .sapMPanelContent {
+            border: 0 !important;
+        }
+        
+        /* reset flexed textareas height */ 
+        .sapMTextArea>.sapMTextAreaInner {
+            height: auto !important;
+        }
+        
+        /* custom css prototypes for addtional used containers */
+    }
+    </style>
+    </template> 

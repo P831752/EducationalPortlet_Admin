@@ -1,9 +1,9 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function (Controller) {
+	"com/lt/educationaladmin/controller/BaseController"
+], function (BaseController) {
 	"use strict";
 
-	return Controller.extend("com.lt.educationaladmin.controller.NotFound", {
+	return BaseController.extend("com.lt.educationaladmin.controller.NotFound", {
 
 		onInit: function () {
 

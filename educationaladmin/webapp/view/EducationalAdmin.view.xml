@@ -1,43 +1,51 @@
-<mvc:View controllerName="com.lt.educationaladmin.controller.EducationalAdmin"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
- 
-<IconTabBar id="idIconTabBar1" select="onFilterSelect">
-    <items>
-        <IconTabFilter text="Pending" key="PA" count="{pendingList>/count}"/>
-        <IconTabFilter text="Approved" key="A" count="{approvedList>/count}"/>
-        <IconTabFilter text="Rejected" key="R" count="{rejectedList>/count}"/>
-        <IconTabFilter text="Draft" key="D" count="{draftList>/count}"/>
-    </items>
-    <content>
-        <Table
-            id="statusTable"
-            items="{activeModel>/}"
-            inset="false"
-            headerText="Status Table">
-            <columns>
-                <Column>
-                    <Text text="PSID" />
-                </Column>
-                <Column>
-                    <Text text="Status" />
-                </Column>
-                <Column>
-                    <Text text="Submission Date" />
-                </Column>
-            </columns>
-            <items>
-                <ColumnListItem type="Navigation" press=".onListItemPress">
-                    <cells>
-                        <Text text="{activeModel>psid}" />
-                        <Text text="{activeModel>status}" />
-                        <Text text="{activeModel>modifiedAt}" />
-                    </cells>
-                </ColumnListItem>
-            </items>
-        </Table>
-    </content>
-</IconTabBar>
-
-
+<mvc:View
+  controllerName="com.lt.educationaladmin.controller.EducationalAdmin"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<Page id="page" showHeader="false">
+		<content>
+			<!-- Custom Header -->
+			<VBox>
+				<!-- Custom Header -->
+				<HBox class="customHeader" alignItems="Center">
+					<Avatar src="sap-icon://education" class="headerIcon"/>
+					<Text text="Educational Admin Dashboard" class="headerTitle"/>
+				</HBox>
+			</VBox>
+			<!-- Rest of your page content goes here -->
+			<IconTabBar id="idIconTabBar1" class="customTabs" expandable="false" select="onFilterSelect">
+				<items>
+					<IconTabFilter text="Pending" key="PA" count="{/Counts/PA}" icon="sap-icon://lateness"/>
+					<IconTabFilter text="Approved" key="A" count="{/Counts/A}" icon="sap-icon://accept"/>
+					<IconTabFilter text="Rejected" key="R" count="{/Counts/R}" icon="sap-icon://decline"/>
+					<IconTabFilter text="Draft" key="D" count="{/Counts/D}" icon="sap-icon://document"/>
+				</items>
+				<!-- Table Section -->
+				<content>
+					<Table id="idTable" items="{psidModel>/}" inset="false">
+						<columns>
+							<Column>
+								<Text text="PSID"/>
+							</Column>
+							<Column>
+								<Text text="Status"/>
+							</Column>
+							<Column>
+								<Text text="Submission Date"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem type="Navigation" press=".onListItemPress">
+								<cells>
+									<Text text="{psidModel>psid}"/>
+									<Text text="{psidModel>status}"/>
+									<Text text="{psidModel>modifiedAt}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</content>
+			</IconTabBar>
+		</content>
+	</Page>
 </mvc:View>

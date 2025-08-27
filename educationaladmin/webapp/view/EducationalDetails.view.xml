@@ -1,6 +1,579 @@
 <mvc:View controllerName="com.lt.educationaladmin.controller.EducationalDetails"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-	<Page title="Educational Details">
-	</Page>
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.uxap"
+	xmlns:m="sap.m"
+	xmlns:upload="sap.m.upload"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout"
+	xmlns:plugin="sap.m.plugins"
+	height="100%">
+	<m:Page
+		id="employeeListPage"
+		showNavButton="true"
+		navButtonPress=".onNavBack">
+		<ObjectPageLayout id="idObjectPageLayout" upperCaseAnchorBar="false" useIconTabBar="true" isChildPage="true"
+    	sectionChange="onSectionChange" showFooter="true">
+			<headerTitle>
+				<ObjectPageDynamicHeaderTitle>
+					<actions>
+						<m:Button text="{i18n>btnApprove}" type="Emphasized" press="onApprove"/>
+						<m:Button id="btnSubmit" text="{i18n>btnReject}" type="Emphasized" press="onReject"/>
+						<m:Button icon="sap-icon://pdf-attachment" type="Emphasized" press="onPressPDF" />
+					</actions>
+					<expandedHeading>
+						<m:HBox alignItems="Center">
+							<m:Image src="./templates/Logo.png" height="50px" />
+							<m:Title text="" width="50px" />
+							<m:Title text="{i18n>title} - {psidModel>/selectedPSID}" level="H2" class="customTitle"/>
+						</m:HBox>
+					</expandedHeading>
+					<snappedHeading>
+						<m:HBox>
+							<m:VBox>
+								<m:Avatar src="" class="sapUiSmallMarginEnd" />
+							</m:VBox>
+						</m:HBox>
+					</snappedHeading>
+				</ObjectPageDynamicHeaderTitle>
+			</headerTitle>
+			<headerContent>
+				<m:HBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+					<m:Avatar src="./templates/avatar.png" class="sapUiMediumMarginEnd" displaySize="L"/>
+					<m:HBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+						<m:VBox>
+							<m:HBox class="sapUiTinyMarginBottom" renderType="Bare" >
+								<m:Label design="Bold" text="{i18n>labelPSId}" class="sapUiSmallMarginEnd"/>
+							</m:HBox>
+							<m:HBox class="sapUiTinyMarginBottom">
+								<m:Label design="Bold" text="{i18n>labelName}" class="sapUiSmallMarginEnd"/>
+							</m:HBox>
+							<m:HBox class="sapUiTinyMarginBottom">
+								<m:Label design="Bold" text="{i18n>labelGrade}" class="sapUiSmallMarginEnd"/>
+							</m:HBox>
+							<m:HBox class="sapUiTinyMarginBottom">
+								<m:Label design="Bold" text="{i18n>labelIC}" class="sapUiSmallMarginEnd"/>
+							</m:HBox>
+						</m:VBox>
+						<m:VBox>
+							<m:HBox class="sapUiTinyMarginBottom" renderType="Bare" >
+								<m:Text text="{psidModel>/selectedPSID}"/>
+							</m:HBox>
+							<m:HBox class="sapUiTinyMarginBottom">
+								<m:Text text="DHANANJAY KUMAR"/>
+							</m:HBox>
+							<m:HBox class="sapUiTinyMarginBottom">
+								<m:Text text="M2-A"/>
+							</m:HBox>
+							<m:HBox class="sapUiTinyMarginBottom">
+								<m:Text text="Heavy Engineering"/>
+							</m:HBox>
+						</m:VBox>
+					</m:HBox>
+				</m:HBox>
+			</headerContent>
+			<sections>
+				<ObjectPageSection id="sscObjPagSection" anchorBarButtonColor="Positive" importance="Medium">
+					<subSections>
+						<ObjectPageSubSection title="{i18n>sscTitle}" blocks="{path: 'displayModel>/sscData', templateShareable: false }">
+							<blocks>
+								<m:VBox>
+									<m:VBox>
+										<m:HBox>
+											<m:items>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel1}" design="Bold"/>
+													<m:Text text="{displayModel>Qualification_Type_Desc}" width="200px" maxLines="1"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel2}" design="Bold"/>
+													<m:Text text="{displayModel>Type_Of_The_Course_Desc}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel3}" design="Bold"/>
+													<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel4}" design="Bold"/>
+													<m:Text text="{displayModel>cust_Percentage}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel5}" design="Bold"/>
+													<m:Text text="{displayModel>University_Desc}" maxLines="1"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel6}" design="Bold"/>
+													<m:Text text="{displayModel>cust_CGPA}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel7}" design="Bold"/>
+													<m:Text text="{displayModel>cust_Year_of_Passing}"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel8}" design="Bold"/>
+													<m:Text text="{displayModel>Division_Desc}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel9}" design="Bold"/>
+													<m:Text text="{displayModel>Type_Of_The_Course_Desc}"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel10}" design="Bold"/>
+													<m:Text text="{displayModel>Grade_Desc}"/>
+												</m:VBox>
+											</m:items>
+										</m:HBox>
+									</m:VBox>
+									<m:VBox>
+<m:List items="{displayModel>oFiles}">
+<m:CustomListItem>
+<m:HBox>
+<m:Text text="Attachment" />
+<m:Link text="{displayModel>fileName}" href="{displayModel>url}" target="_blank" />
+</m:HBox>
+</m:CustomListItem>
+</m:List>
+							</m:VBox>
+								</m:VBox>
+							</blocks>
+						</ObjectPageSubSection>
+					</subSections>
+				</ObjectPageSection>
+				<ObjectPageSection id="hscObjPagSection" anchorBarButtonColor="Positive" importance="Medium">
+					<subSections>
+						<ObjectPageSubSection title="{i18n>hscTitle}" blocks="{path: 'displayModel>/hscData', templateShareable: false }">
+							<blocks>
+								<m:VBox>
+									<m:VBox>
+										<m:HBox>
+											<m:items>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel1}" design="Bold"/>
+													<m:Text text="{displayModel>Qualification_Type_Desc}" width="200px" maxLines="1"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel2}" design="Bold"/>
+													<m:Text text="{displayModel>Type_Of_The_Course_Desc}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel3}" design="Bold"/>
+													<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel4}" design="Bold"/>
+													<m:Text text="{displayModel>cust_Percentage}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel5}" design="Bold"/>
+													<m:Text text="{displayModel>University_Desc}" maxLines="1"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel6}" design="Bold"/>
+													<m:Text text="{displayModel>cust_CGPA}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel7}" design="Bold"/>
+													<m:Text text="{displayModel>cust_Year_of_Passing}"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel8}" design="Bold"/>
+													<m:Text text="{displayModel>Division_Desc}"/>
+												</m:VBox>
+												<m:VBox class="sapUiLargeMarginEnd" width="20%">
+													<m:Label text="{i18n>shLabel9}" design="Bold"/>
+													<m:Text text="{displayModel>Type_Of_The_Course_Desc}"/>
+													<m:Text text=" " width="20px"/>
+													<m:Label text="{i18n>shLabel10}" design="Bold"/>
+													<m:Text text="{displayModel>Grade_Desc}"/>
+												</m:VBox>
+											</m:items>
+										</m:HBox>
+									</m:VBox>
+									<m:Text text=" " width="20px"/>
+									<m:VBox id="" alignItems="Center"/></m:VBox>
+							</blocks>
+						</ObjectPageSubSection>
+					</subSections>
+				</ObjectPageSection>
+				<ObjectPageSection id="tradCTObjPagSection" anchorBarButtonColor="Positive" title="{i18n>tradCTitle}" importance="Medium"
+                subSections="{path: 'displayModel>/tradCData', templateShareable: false }">
+					<ObjectPageSubSection 					
+					title="{parts: ['displayModel>/tradCData', 'displayModel>cust_Education_CertificateNew', 'i18n>tradCTitle'], 
+            			formatter: '.formatter.getSubSectionTitle'}" class="sapUiNoMargin">
+						<blocks>
+							<m:VBox>
+								<m:VBox>
+									<m:HBox>
+										<m:items>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label1}" design="Bold"/>
+												<m:Text text="{displayModel>Qualification_Sub_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label2}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label3}" design="Bold"/>
+												<m:Text text="{displayModel>cust_CGPA}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label4}" design="Bold"/>
+												<m:Text text="{displayModel>Education_Certificate_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label5}" design="Bold"/>
+												<m:Text text="{displayModel>University_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label6}" design="Bold"/>
+												<m:Text text="{displayModel>Division_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label7}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_1_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label8}" design="Bold"/>
+												<m:Text text="{displayModel>Type_Of_The_Course_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label9}" design="Bold"/>
+												<m:Text text="{displayModel>Grade_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label10}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_2_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label11}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Duration_Of_The_Course}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label12}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Year_of_Passing}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label13}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Percentage}" />
+											</m:VBox>
+										</m:items>
+									</m:HBox>
+								</m:VBox>
+								<m:Text text=" " width="20px"/>
+							</m:VBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</ObjectPageSection>
+			<ObjectPageSection id="diplObjPagSection" anchorBarButtonColor="Positive" title="{i18n>diplTitle}" importance="Medium"
+                subSections="{path: 'displayModel>/diplData', templateShareable: false }">
+				<ObjectPageSubSection 
+					title="{parts: ['displayModel>/diplData', 'displayModel>Education_Certificate_Desc', 'i18n>diplTitle'], 
+            			formatter: '.formatter.getSubSectionTitle'}" class="sapUiNoMargin">
+						<blocks>
+							<m:VBox>
+								<m:VBox>
+									<m:HBox>
+										<m:items>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label1}" design="Bold"/>
+												<m:Text text="{displayModel>Qualification_Sub_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label2}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label3}" design="Bold"/>
+												<m:Text text="{displayModel>cust_CGPA}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label4}" design="Bold"/>
+												<m:Text text="{displayModel>Education_Certificate_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label5}" design="Bold"/>
+												<m:Text text="{displayModel>University_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label6}" design="Bold"/>
+												<m:Text text="{displayModel>Division_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label7}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_1_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label8}" design="Bold"/>
+												<m:Text text="{displayModel>Type_Of_The_Course_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label9}" design="Bold"/>
+												<m:Text text="{displayModel>Grade_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label10}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_2_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label11}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Duration_Of_The_Course}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label12}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Year_of_Passing}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label13}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Percentage}" />
+											</m:VBox>
+										</m:items>
+									</m:HBox>
+								</m:VBox>
+								<m:Text text=" " width="20px"/>
+							</m:VBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</ObjectPageSection>
+			<ObjectPageSection id="gradObjPagSection" anchorBarButtonColor="Positive" title="{i18n>gradTitle}" importance="Medium"
+                subSections="{path: 'displayModel>/gradData', templateShareable: false }">
+				<ObjectPageSubSection 
+					title="{parts: ['displayModel>/gradData', 'displayModel>Education_Certificate_Desc', 'i18n>gradTitle'], 
+            			formatter: '.formatter.getSubSectionTitle'}" class="sapUiNoMargin">
+						<blocks>
+							<m:VBox>
+								<m:VBox>
+									<m:HBox>
+										<m:items>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label1}" design="Bold"/>
+												<m:Text text="{displayModel>Qualification_Sub_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label2}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label3}" design="Bold"/>
+												<m:Text text="{displayModel>cust_CGPA}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label4}" design="Bold"/>
+												<m:Text text="{displayModel>Education_Certificate_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label5}" design="Bold"/>
+												<m:Text text="{displayModel>University_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label6}" design="Bold"/>
+												<m:Text text="{displayModel>Division_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label7}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_1_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label8}" design="Bold"/>
+												<m:Text text="{displayModel>Type_Of_The_Course_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label9}" design="Bold"/>
+												<m:Text text="{displayModel>Grade_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label10}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_2_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label11}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Duration_Of_The_Course}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label12}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Year_of_Passing}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label13}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Percentage}" />
+											</m:VBox>
+										</m:items>
+									</m:HBox>
+								</m:VBox>
+								<m:Text text=" " width="20px"/>
+							</m:VBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</ObjectPageSection>
+			<ObjectPageSection id="masterObjPagSection" anchorBarButtonColor="Positive" title="{i18n>masterTitle}" importance="Medium"
+                subSections="{path: 'displayModel>/masterData', templateShareable: false }">
+				<ObjectPageSubSection 
+					title="{parts: ['displayModel>/masterData', 'displayModel>Education_Certificate_Desc', 'i18n>masterTitle'], 
+            			formatter: '.formatter.getSubSectionTitle'}" class="sapUiNoMargin">
+						<blocks>
+							<m:VBox>
+								<m:VBox>
+									<m:HBox>
+										<m:items>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label1}" design="Bold"/>
+												<m:Text text="{displayModel>Qualification_Sub_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label2}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label3}" design="Bold"/>
+												<m:Text text="{displayModel>cust_CGPA}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label4}" design="Bold"/>
+												<m:Text text="{displayModel>Education_Certificate_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label5}" design="Bold"/>
+												<m:Text text="{displayModel>University_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label6}" design="Bold"/>
+												<m:Text text="{displayModel>Division_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label7}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_1_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label8}" design="Bold"/>
+												<m:Text text="{displayModel>Type_Of_The_Course_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label9}" design="Bold"/>
+												<m:Text text="{displayModel>Grade_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label10}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_2_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label11}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Duration_Of_The_Course}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label12}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Year_of_Passing}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label13}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Percentage}" />
+											</m:VBox>
+										</m:items>
+									</m:HBox>
+								</m:VBox>
+								<m:Text text=" " width="20px"/>
+							</m:VBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</ObjectPageSection>
+			<ObjectPageSection id="pgradObjPagSection" anchorBarButtonColor="Positive" title="{i18n>pgradTitle}" importance="Medium"
+                subSections="{path: 'displayModel>/pgradData', templateShareable: false }">
+				<ObjectPageSubSection 
+					title="{parts: ['displayModel>/pgradData', 'displayModel>Education_Certificate_Desc', 'i18n>pgradTitle'], 
+            			formatter: '.formatter.getSubSectionTitle'}" class="sapUiNoMargin">
+						<blocks>
+							<m:VBox>
+								<m:VBox>
+									<m:HBox>
+										<m:items>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label1}" design="Bold"/>
+												<m:Text text="{displayModel>Qualification_Sub_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label2}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label3}" design="Bold"/>
+												<m:Text text="{displayModel>cust_CGPA}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label4}" design="Bold"/>
+												<m:Text text="{displayModel>Education_Certificate_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label5}" design="Bold"/>
+												<m:Text text="{displayModel>University_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label6}" design="Bold"/>
+												<m:Text text="{displayModel>Division_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label7}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_1_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label8}" design="Bold"/>
+												<m:Text text="{displayModel>Type_Of_The_Course_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label9}" design="Bold"/>
+												<m:Text text="{displayModel>Grade_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label10}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_2_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label11}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Duration_Of_The_Course}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label12}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Year_of_Passing}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label13}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Percentage}" />
+											</m:VBox>
+										</m:items>
+									</m:HBox>
+								</m:VBox>
+								<m:Text text=" " width="20px"/>
+							</m:VBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</ObjectPageSection>
+			<ObjectPageSection id="doctObjPagSection" anchorBarButtonColor="Positive" title="{i18n>doctTitle}" importance="Medium"
+                subSections="{path: 'displayModel>/doctData', templateShareable: false }">
+				<ObjectPageSubSection 
+					title="{parts: ['displayModel>/doctData', 'displayModel>Education_Certificate_Desc', 'i18n>doctTitle'], 
+            			formatter: '.formatter.getSubSectionTitle'}" class="sapUiNoMargin">
+						<blocks>
+							<m:VBox>
+								<m:VBox>
+									<m:HBox>
+										<m:items>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label1}" design="Bold"/>
+												<m:Text text="{displayModel>Qualification_Sub_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label2}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Institute_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label3}" design="Bold"/>
+												<m:Text text="{displayModel>cust_CGPA}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label4}" design="Bold"/>
+												<m:Text text="{displayModel>Education_Certificate_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label5}" design="Bold"/>
+												<m:Text text="{displayModel>University_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label6}" design="Bold"/>
+												<m:Text text="{displayModel>Division_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label7}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_1_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label8}" design="Bold"/>
+												<m:Text text="{displayModel>Type_Of_The_Course_Desc}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label9}" design="Bold"/>
+												<m:Text text="{displayModel>Grade_Desc}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label10}" design="Bold"/>
+												<m:Text text="{displayModel>Branch_2_Desc}" maxLines="1" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label11}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Duration_Of_The_Course}" />
+											</m:VBox>
+											<m:VBox class="sapUiLargeMarginEnd" width="20%">
+												<m:Label text="{i18n>label12}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Year_of_Passing}" />
+												<m:Text text=" " width="20px"/>
+												<m:Label text="{i18n>label13}" design="Bold"/>
+												<m:Text text="{displayModel>cust_Percentage}" />
+											</m:VBox>
+										</m:items>
+									</m:HBox>
+								</m:VBox>
+								<m:Text text=" " width="20px"/>
+							</m:VBox>
+						</blocks>
+					</ObjectPageSubSection>
+				</ObjectPageSection>
+			</sections>
+		</ObjectPageLayout>
+	</m:Page>
+	<m:Dialog
+  id="commentDialog"
+  title="Enter Reject Comments"
+  type="Message"
+  draggable="true"
+  resizable="true"
+  contentWidth="400px"
+  contentHeight="200px">
+		<m:TextArea id="commentTextArea" width="100%" rows="5" placeholder="Enter your comments here..." />
+		<m:beginButton>
+			<m:Button text="OK" press="onDialogOkPress" />
+		</m:beginButton>
+		<m:endButton>
+			<m:Button text="Cancel" press="onDialogCancelPress" />
+		</m:endButton>
+	</m:Dialog>
 </mvc:View>

@@ -9,16 +9,17 @@ server:
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ignoreCertError: false
         ui5:
           path:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
         backend:
-          - path: /odata
-            url: https://larsen---toubro-limited-sf-ext-preview-pspace-education564a7b4e.cfapps.in30.hana.ondemand.com
+          - url: https://larsen---toubro-limited-sf-ext-preview-pspace-education564a7b4e.cfapps.in30.hana.ondemand.com
+            authenticationType: NoAuthentication
             destination: EDUCATIONAL_SRV
+            path: /odata
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -38,5 +39,9 @@ server:
           - urlPath: /odata/v4/educational
             metadataPath: ./webapp/localService/mainService/metadata.xml
             mockdataPath: ./webapp/localService/mainService/data
+            generateMockData: true
+          - urlPath: /odata/v2
+            metadataPath: ./webapp/localService/SF/metadata.xml
+            mockdataPath: ./webapp/localService/SF/data
             generateMockData: true
         annotations: []

@@ -24,6 +24,15 @@
           "localUri": "localService/mainService/metadata.xml",
           "odataVersion": "4.0"
         }
+      },
+      "SF": {
+        "uri": "/odata/v2/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/SF/metadata.xml",
+          "odataVersion": "2.0"
+        }
       }
     }
   },
@@ -71,6 +80,20 @@
           "autoExpandSelect": true,
           "earlyRequests": true
         }
+      },
+      "SF": {
+        "dataSource": "SF",
+        "preload": true,
+        "settings": {}
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
       }
     },
     "resources": {
@@ -91,8 +114,8 @@
         "path": "com.lt.educationaladmin.view",
         "viewPath": "com.lt.educationaladmin.view",
         "bypassed": {
-					"target": "notFound"
-				},
+          "target": "notFound"
+        },
         "async": true
       },
       "routes": [
@@ -104,8 +127,8 @@
           ]
         },
         {
-          "name": "EducationalDetails",
-          "pattern": "educationalDetail/{psid}",
+          "name": "educationalDetail",
+          "pattern": "EducationalDetail/{psid}",
           "target": [
             "TargetEducationalDetails"
           ]
@@ -114,17 +137,19 @@
       "targets": {
         "TargetEducationalAdmin": {
           "id": "EducationalAdmin",
-          "name": "EducationalAdmin"
+          "name": "EducationalAdmin",
+          "level": 1
         },
         "TargetEducationalDetails": {
-          "id": "EducationalDetails",
-          "name": "EducationalDetails"
+          "id": "educationalDetail",
+          "name": "EducationalDetails",
+          "level": 2
         },
-				"notFound": {
-					"id": "notFound",
-					"name": "NotFound",
-					"transition": "show"
-				}
+        "notFound": {
+          "id": "notFound",
+          "name": "NotFound",
+          "transition": "show"
+        }
       }
     },
     "rootView": {

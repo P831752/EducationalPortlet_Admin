@@ -1,96 +1,103 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
-	"sap/ui/model/json/JSONModel",
-	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator",
-], (Controller, JSONModel, Filter, FilterOperator) => {
-	"use strict";
+  "com/lt/educationaladmin/controller/BaseController",
+  "sap/ui/model/json/JSONModel",
+  "sap/ui/model/Filter",
+  "sap/ui/model/FilterOperator",
+], (BaseController, JSONModel, Filter, FilterOperator) => {
+  "use strict";
 
-	return Controller.extend("com.lt.educationaladmin.controller.EducationalAdmin", {
-		onInit: function () {
-			this.oODataModel = this.getOwnerComponent().getModel("educational"); // OData model
-			this.getView().setModel(new sap.ui.model.json.JSONModel(), "activeModel"); // Active model for table
-			this._loadData("PA"); // Load default tab data
-			
-			const statusList = ["A", "D", "R"];
-			for (const status of statusList) {
-				this._getStatusCount(status);
-			}
-		},
+  return BaseController.extend("com.lt.educationaladmin.controller.EducationalAdmin", {
+    onInit: function () {
 
-		onFilterSelect: function (oEvent) {
-			const sKey = oEvent.getParameter("key");
-			this._loadData(sKey);
-		},
+      // Model for counts
+      var oCountModel = new JSONModel({
+        Counts: { PA: 0, A: 0, R: 0, D: 0 }
+      });
+      this.getView().setModel(oCountModel);
 
-		_loadData: function (statusKey) {
-			const oView = this.getView();
-			//const oModel = this.getOwnerComponent().getModel();//this.oODataModel;
-			let oModel = this.getOwnerComponent().getModel("educational")//"educational"
-			const filters = [new sap.ui.model.Filter("status", FilterOperator.EQ, statusKey)];
-			let oBinding = oModel.bindList("/Educational_History", undefined, undefined, filters)
-			// Build filter based on tab key
+      // Load all status counts initially
+      this._loadAllStatusCounts();
 
-			// Read from OData service
-		/*	oModel.read("/Educational_History", {
-				filters: aFilters,
-				success: function (oData) {
-					const oJSONModel = new sap.ui.model.json.JSONModel(oData);
-					oView.setModel(oJSONModel, "active");
-				},
-				error: function (oError) {
-					console.error("OData read failed", oError);
-				}
-			}); */
-				oBinding.requestContexts().then((aContexts) => {
-					let aData = aContexts.map((oContext) => oContext.getObject())	
-                    
-					let model = new JSONModel({count:aContexts.length})
-                    this.getView().setModel(model, "pendingList")
+      this._loadData("PA"); // Load default tab data
 
-                    const oJSONModel = new sap.ui.model.json.JSONModel(aData);
-					oView.setModel(oJSONModel, "activeModel");
+    },
 
-				}).catch((error) => {
-					console.error("Error Fetching HanaDBPendingList data:", error)
-				})
-		},
+    _loadAllStatusCounts: function () {
+      var that = this;
+      const oView = that.getView();
+      var oCountModel = oView.getModel();
+      let oModel = that.getOwnerComponent().getModel("educational");
 
-		_getStatusCount: function (statusKey) {
-			const oView = this.getView();
-			const oModel = this.oODataModel;
-			const filters = [new sap.ui.model.Filter("status", FilterOperator.EQ, statusKey)];
-			let oBinding = oModel.bindList("/Educational_History", undefined, undefined, filters)
+      const statusKeys = ["PA", "A", "R", "D"];
+      let oCounts = oCountModel.getProperty("/Counts");
 
-				oBinding.requestContexts().then((aContexts) => {
-					let aData = aContexts.map((oContext) => oContext.getObject())	
-                    
-					if (statusKey === "A"){
-						let aModel = new JSONModel({count:aContexts.length})
-						this.getView().setModel(aModel, "approvedList")
-					} else if (statusKey === "D"){
-						let dModel = new JSONModel({count:aContexts.length})
-						this.getView().setModel(dModel, "draftList")
-					} else {
-						let rModel = new JSONModel({count:aContexts.length})
-						this.getView().setModel(rModel, "rejectedList")
-					}
+      statusKeys.forEach(function (sStatus) {
+        const aFilters = [
+            new Filter("status", FilterOperator.EQ, sStatus),
+            new Filter("cust_Qualification_Type", FilterOperator.Contains, "Q01")
+        ];
+        let oBinding = oModel.bindList("/Educational_Details", undefined, undefined, aFilters);
 
-				}).catch((error) => {
-					console.error("Error Fetching HanaDBPendingList data:", error)
-				})
-		},
+        oBinding.requestContexts().then((aContexts) => {
+          oCounts[sStatus] = aContexts.length;
+          oCountModel.setProperty("/Counts", oCounts);
+        }).catch((error) => {
+          console.error("Error fetching count for status " + sStatus + ":", error);
+        });
+      });
+    },
 
-        onListItemPress: function (oEvent) {
+    onFilterSelect: function (e) {
+      const key = e.getParameter("key");
+      this._loadData(key);
+    },
 
-            var oSource = oEvent.getSource(),
-            oContext = oSource.getBindingContext("activeModel"),
-            oSelectedID = oContext.getObject().psid;
+    _loadData: function (sStatus) {
+      var that = this
+      const oView = that.getView();
+      var oCountModel = oView.getModel();
+      var oTable = this.byId("idTable");
 
-            //var oSelectedID = "123456";
+      let oModel = that.getOwnerComponent().getModel("educational")//"educational"
+      const aFilters = [
+            new Filter("status", FilterOperator.EQ, sStatus),
+            new Filter("cust_Qualification_Type", FilterOperator.Contains, "Q01")
+        ];
+      let oBinding = oModel.bindList("/Educational_Details", undefined, undefined, aFilters)
+      // Build filter based on tab key
 
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("educationalDetail", {psid: oSelectedID});
-		}
-	});
+      oBinding.requestContexts().then((aContexts) => {
+        let aData = aContexts.map((oContext) => oContext.getObject())
+
+        var oCounts = oCountModel.getProperty("/Counts");
+        oCounts[sStatus] = aData.length;
+        oCountModel.setProperty("/Counts", oCounts);
+
+        // Bind data to table                    
+        var oJsonModel = new JSONModel();
+        oJsonModel.setData(aData);
+        that.getView().setModel(oJsonModel, "psidModel");
+
+      }).catch((error) => {
+        console.error("Error Fetching HanaDBPendingList data:", error)
+      })
+    },
+
+    onListItemPress: function (oEvent) {
+
+      var oSource = oEvent.getSource(),
+        oContext = oSource.getBindingContext("psidModel"),
+        oSelectedID = oContext.getObject().psid;
+
+      //this.getRouter().navTo("educationalDetail");
+      this.getRouter().navTo("educationalDetail", { psid: oSelectedID });
+    },
+
+    onDisplayNotFound: function () {
+      // display the "notFound" target without changing the hash
+      this.getRouter().getTargets().display("notFound", {
+        fromTarget: "home"
+      });
+    },
+  });
 });
