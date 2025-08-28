@@ -18,7 +18,7 @@
 					<IconTabFilter text="Pending" key="PA" count="{/Counts/PA}" icon="sap-icon://lateness"/>
 					<IconTabFilter text="Approved" key="A" count="{/Counts/A}" icon="sap-icon://accept"/>
 					<IconTabFilter text="Rejected" key="R" count="{/Counts/R}" icon="sap-icon://decline"/>
-					<IconTabFilter text="Draft" key="D" count="{/Counts/D}" icon="sap-icon://document"/>
+					<!-- <IconTabFilter text="Draft" key="D" count="{/Counts/D}" icon="sap-icon://document"/> -->
 				</items>
 				<!-- Table Section -->
 				<content>

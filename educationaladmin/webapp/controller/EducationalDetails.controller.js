@@ -31,7 +31,7 @@ sap.ui.define([
 
 			this._getEducationDetails(oPSID)
 				.then((aData) => this._onEducationDataFetched(aData));
-			
+
 			this._getDMSFiles(oPSID);
 		},
 
@@ -111,19 +111,27 @@ sap.ui.define([
 
 			let processPromises = qualificationMap.map(
 				({ type, path }) => {
-					let dataSet = data.filter(item => item.cust_Qualification_Type === type) 
+					let dataSet = data.filter(item => item.cust_Qualification_Type === type)
+
+					// Convert string to array if needed
+					dataSet.forEach(item => {
+						if (typeof item.modifiedfields === "string") {
+							item.modifiedfields = item.modifiedfields.split(',').map(s => s.trim());
+						}
+					});
+
 					oDisplayModel.setProperty(path, dataSet)
 				})
 
 			// var oLabel = this.getView().byId("shLabel6");
 			// oLabel.addStyleClass("highlightLabel");
 			Promise.all(processPromises).then(() => {
-					this.uploadData.forEach(function(item) {
+				this.uploadData.forEach(function (item) {
 					let section = item.fileName.split("_")[1].toLowerCase()
 					let subSection = item.fileName.split("_")[2]
 					let propName = "/" + section + "Data"
 					let sProperty = oDisplayModel.getProperty(propName)
-					sProperty.forEach(function(prop, index) {
+					sProperty.forEach(function (prop, index) {
 						if (subSection === prop.cust_Education_Certificate) {
 							let filePath = `${propName}/${index}/oFiles`
 
@@ -142,21 +150,41 @@ sap.ui.define([
 			this.getView().setBusy(true)
 			let psid = this.getView().getModel("psidModel").oData.selectedPSID
 			let oReadDisplayModelData = this.getView().getModel("displayModel").oData
-			for (let key in oReadDisplayModelData) {
-				let records = oReadDisplayModelData[key]
-				if (records.length > 0) {
-					for (let record of records) {
-						let updateStatus = await this._updateInSF(psid, record)
-						if (updateStatus.d[0].status === "ERROR") {
-							MessageBox.error("Error:" +updateStatus.d[0].message)
-							return
-						} else {
-							MessageBox.success("Educational Details are successfully Approved.");
+			let errors = [], processed = 0;
+
+			try {
+				for (let section in oReadDisplayModelData) {
+					let records = oReadDisplayModelData[section]
+					if (records.length > 0) {
+						for (let record of records) {
+							try {
+								// Step 1: Update in SuccessFactors
+                        		let updateStatus = await this._updateInSF(psid, record);
+								if (updateStatus.d[0].status === "ERROR") {
+									errors.push(`SF Error for record ${record.externalCode}: ${updateStatus.d[0].message}`);
+                            		continue; // Skip HANA update for this record
+								}
+								// Step 2: Update in HANA
+                        		await this._updateInHana(psid, record, "A");
+
+								processed++;
+							} catch (error) {
+								errors.push(`General error for record ${record.externalCode}: ${err.message || err}`);
+							}
 						}
-						//await this._updateInHana(psid, record,"A")
 					}
 				}
-			}
+
+				if (errors.length > 0) {
+					MessageBox.error(`Process completed with errors.\n\nSuccessful updates: ${processed}\nErrors:\n${errors.join("\n")}`);
+				} else {
+					MessageBox.success(`All ${processed} record(s) successfully approved.`);
+				}
+			} catch (globalErr) {
+				MessageBox.error(`Unexpected error: ${globalErr.message || globalErr}`);
+    		} finally {
+        		this.getView().setBusy(false);
+    		}
 		},
 
 		_updateInHana: function (psid, oDetails, status) {
@@ -208,17 +236,13 @@ sap.ui.define([
 					data: JSON.stringify(eduDetails),
 					contentType: "application/json",
 					success: (response) => {
-						this.getView().setBusy(false)
-						MessageToast.show("Updated successfully!")
-						console.log("Response:", response)
-						resolve()
+						MessageToast.show("Updated in HANA successfully!");
+						//console.log("Response:", response)
+						resolve(response)
 					},
 					error: (err) => {
-						this.getView().setBusy(false)
-						let errorMsg = err?.responseText || "Unknown error"
-						MessageBox.error(`Error while adding data: ${errorMsg}`)
-						console.error("Error while adding data:", errorMsg)
-						reject(err)
+						let errorMsg = err?.responseText||"Unknown error"
+						reject(new Error(errorMsg));
 					}
 				})
 			})
@@ -227,63 +251,49 @@ sap.ui.define([
 		_updateInSF: function (psid, oDetails) {
 			return new Promise((resolve, reject) => {
 
-				let eduDetails = {};
-
-				eduDetails.__metadata = {
-					"uri": `cust_EducationChild1`+
-					`(cust_EducationParentLegacy_effectiveStartDate=datetime'${oDetails.ParentLegacy_effectiveStartDate}',`+
-					`cust_EducationParentLegacy_externalCode='${psid}',`+
-					`externalCode='${oDetails.externalCode}L')`
-				};
-
-				eduDetails.cust_Education_Certificate= oDetails.cust_Education_Certificate
-				eduDetails.cust_Institute= oDetails.cust_Institute
-				eduDetails.cust_University= oDetails.cust_University
-				eduDetails.cust_Year_of_Passing= oDetails.cust_Year_of_Passing
-				eduDetails.cust_Type_Of_The_Course= oDetails.cust_Type_Of_The_Course
-				eduDetails.cust_Duration_Of_The_Course= oDetails.cust_Duration_Of_The_Course
-				eduDetails.cust_Percentage= oDetails.cust_Percentage
-				eduDetails.cust_CGPA= oDetails.cust_CGPA
-				eduDetails.cust_Division= oDetails.cust_Division
-				eduDetails.cust_Grade= oDetails.cust_Grade
-				
-				eduDetails.cust_Qualification_Sub_Type= oDetails.cust_Qualification_Sub_Type
-				eduDetails.cust_Branch_1= oDetails.cust_Branch_1
-				eduDetails.cust_Branch_2= oDetails.cust_Branch_2
-				
-				console.log("eduDetails:", eduDetails)
+				let eduDetails = {
+					__metadata: {
+					"uri": `cust_EducationChild1` +
+						`(cust_EducationParentLegacy_effectiveStartDate=datetime'${oDetails.ParentLegacy_effectiveStartDate}',` +
+						`cust_EducationParentLegacy_externalCode='${psid}',` +
+						`externalCode=${oDetails.externalCode}L)`
+					},
+					//for error display, `externalCode='${oDetails.externalCode}L')`
+					cust_Education_Certificate:oDetails.cust_Education_Certificate,
+					cust_Institute:oDetails.cust_Institute,
+					cust_University:oDetails.cust_University,
+					cust_Year_of_Passing:oDetails.cust_Year_of_Passing,
+					cust_Type_Of_The_Course:oDetails.cust_Type_Of_The_Course,
+					cust_Duration_Of_The_Course:oDetails.cust_Duration_Of_The_Course,
+					cust_Percentage:oDetails.cust_Percentage,
+					cust_CGPA:oDetails.cust_CGPA,
+					cust_Division: oDetails.cust_Division === "" ? null : oDetails.cust_Division,
+					cust_Grade:oDetails.cust_Grade,				
+					cust_Qualification_Sub_Type:oDetails.cust_Qualification_Sub_Type,
+					cust_Branch_1:oDetails.cust_Branch_1,
+					cust_Branch_2:oDetails.cust_Branch_2
+				}
+				//console.log("eduDetails:", eduDetails)
 				let sBaseUrl = this.getOwnerComponent().getModel("SF").sServiceUrl
-                var posturl = sBaseUrl + "/upsert";
+				//var posturl = sBaseUrl + "/upsert";
+				let posturl = `${sBaseUrl}/upsert`;
 
 				console.log("posturl:", posturl)
 
-                    $.ajax({
-                        url: posturl,
-                        type: "POST",
-                        headers: {
-                            "Accept":"application/json",
-                            "Content-Type" : "application/json"
-                        },
-                        data: JSON.stringify(eduDetails),
-
-                        success: function(response) {
-							// if (response.d[0].status === "ERROR") {
-							// 	MessageBox.error("Error:" +response.d[0].message);
-							// }                       
-                            // console.log("Update In SF Success:", response);
-							// MessageBox.success("Educational Details are successfully Approved.");
-							resolve(response);
-                        },
-                        error: function(error) {
-                            console.log("Update In SF Error:", error);
-                            console.log("Update In SF Error Text:", error.responseText);
-							MessageBox.error(error.responseText);
-                            reject(error);
-                        }
-                    });
-                });
+				$.ajax({
+					url: posturl,
+					type: "POST",
+					headers: {
+						"Accept": "application/json",
+						"Content-Type": "application/json"
+					},
+					data: JSON.stringify(eduDetails),
+					success: (response) => resolve(response),
+					error: (error) => reject(error)
+				});
+			});
 		},
-		
+
 		async _getDMSFiles(psid) {
 			let docserviceBaseurl = this.getOwnerComponent().getManifestObject().resolveUri('DMS_Dest') //<Repo ID>/root,
 			let eduFolder = "/Educational_Certificates"
@@ -294,7 +304,7 @@ sap.ui.define([
 				url: sUrl,
 				type: "GET",
 				async: false,
-				success: function(successData) {
+				success: function (successData) {
 					successData.objects.map(item => {
 						let properties = item.object.properties
 						that.uploadData.push({
@@ -303,7 +313,7 @@ sap.ui.define([
 						})
 					})
 				},
-				error: function(errorData) {
+				error: function (errorData) {
 					console.log("error : " + errorData)
 				}
 			})
@@ -322,8 +332,8 @@ sap.ui.define([
 			this.byId("commentDialog").close();
 		},
 
-		_getJSONDateFormat: function(date) {
-			const milliseconds = new Date(date).getTime(); 
+		_getJSONDateFormat: function (date) {
+			const milliseconds = new Date(date).getTime();
 			//const sapFormattedDate = `/Date(${milliseconds})/`;
 			//console.log(sapFormattedDate);
 			return `/Date(${milliseconds})/`

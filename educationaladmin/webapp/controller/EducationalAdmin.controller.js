@@ -28,7 +28,8 @@ sap.ui.define([
       var oCountModel = oView.getModel();
       let oModel = that.getOwnerComponent().getModel("educational");
 
-      const statusKeys = ["PA", "A", "R", "D"];
+      //const statusKeys = ["PA", "A", "R", "D"];
+      const statusKeys = ["PA", "A", "R"];
       let oCounts = oCountModel.getProperty("/Counts");
 
       statusKeys.forEach(function (sStatus) {
